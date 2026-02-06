@@ -9,22 +9,25 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// --- 2. MIDDLEWARE & SWAGGER ---
-// Vi tar bort "if (app.Environment.IsDevelopment())" så att du kan se sidan på AWS
+
+// tar bort "if (app.Environment.IsDevelopment())" så att du kan se sidan på AWS
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Krypterings API V1");
-    c.RoutePrefix = string.Empty; // Detta gör att Swagger hamnar direkt på startsidan
+    c.RoutePrefix = string.Empty; 
 });
 
-// Vi kommenterar bort HTTPS-redirection eftersom AWS ofta hanterar detta i sin lastbalanserare
+// kommenterar bort HTTPS-redirection eftersom AWS ofta hanterar detta i sin lastbalanserare
 // app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.MapControllers();
+app.MapControllers()
 
-// --- 3. ENDPOINTS (DIN KODMASKIN) ---
+// Enkel hälsningsfras för att se att allt lever
+app.MapGet("/status", () => "Welcome to the encryption converter, created by Muhammad Sheik Ali. \nThe system works flawless and running in AWS so have  fun converting!");
+
+
 
 // OMVANDLARE: Text -> Base64
 app.MapPost("/encrypt", (string text) => {
@@ -52,8 +55,5 @@ app.MapPost("/decrypt", (string base64Text) => {
         return "Fel: Kunde inte avkoda texten. Kontrollera att det är giltig Base64.";
     }
 });
-
-// Enkel hälsningsfras för att se att allt lever
-app.MapGet("/status", () => "Systemet är online och körs på AWS!");
 
 app.Run();
