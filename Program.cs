@@ -10,13 +10,13 @@ builder.Services.AddSwaggerGen(); // Lägg till för att generera Swagger/OpenAPI-
 var app = builder.Build();
 
 // Aktivera Swagger UI i utvecklingsmiljö
-if (app.Environment.IsDevelopment())
+
 {
     app.UseSwagger(); // Generera Swagger-dokumentation
     app.UseSwaggerUI(); // Visa Swagger UI
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers(); // Detta mappar alla controllers, t.ex. EncryptionController
 
