@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include=".github\workflows\aws.yml" />
+    <None Include=".github\workflows\deploy.yml" />
+  </ItemGroup>
+
 </Project>

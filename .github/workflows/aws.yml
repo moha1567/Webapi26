@@ -1,0 +1,41 @@
+name: Deploy to AWS Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - letsgo  #// Se till att detta matchar din huvudbranch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '10.0'  
+
+      - name: Publish .NET app
+        run: dotnet publish -c Release -o ./publish
+
+      - name: Zip published app
+        run: zip -r deploy.zip ./publish
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1  
+
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          application_name: ${{ secrets.AWS_EB_APPLICATION_NAME }}
+          environment_name: ${{ secrets.AWS_EB_ENVIRONMENT_NAME }}
+          version_label: "deploy-${{ github.run_number }}"
+          region: eu-north-1  
+          deployment_package: deploy.zip
