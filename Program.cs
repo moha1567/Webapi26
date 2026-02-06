@@ -1,23 +1,26 @@
-
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Lägg till services för API och Swagger
-builder.Services.AddControllers(); // Lägg till detta för att stödja controllers
-builder.Services.AddEndpointsApiExplorer(); // Lägg till för att kunna skapa Swagger
-builder.Services.AddSwaggerGen(); // Lägg till för att generera Swagger/OpenAPI-dokumentation
+// 1. Lägg till tjänster
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Aktivera Swagger UI i utvecklingsmiljö
-
+// 2. VIKTIGT: Ta bort "if (app.Environment.IsDevelopment())" 
+// Vi vill att Swagger ska synas även på AWS (Production) så vi kan testa
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger(); // Generera Swagger-dokumentation
-    app.UseSwaggerUI(); // Visa Swagger UI
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPI26 V1");
+    c.RoutePrefix = string.Empty; // Detta gör att Swagger blir startsidan på AWS!
+});
 
-// app.UseHttpsRedirection();
+// 3. Kommentera bort HttpsRedirection tillfälligt
+// AWS sköter HTTPS åt dig, och denna rad kan krocka med AWS interna inställningar
+// app.UseHttpsRedirection(); 
+
 app.UseAuthorization();
-app.MapControllers(); // Detta mappar alla controllers, t.ex. EncryptionController
+app.MapControllers();
 
 app.Run();
