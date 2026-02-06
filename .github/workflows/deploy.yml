@@ -19,7 +19,7 @@ jobs:
           dotnet-version: '10.0'
 
       - name: Publish .NET app
-        run: dotnet publish -c Release -o ./publish
+        run: dotnet publish WebApi -c Release -o ./publish
 
       - name: Zip published app
         # Ändrat här för att undvika undermappar i zippen
