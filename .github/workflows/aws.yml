@@ -3,7 +3,7 @@
 # on:
 #   push:
 #     branches:
-#       - letsgo  #// Se till att detta matchar din huvudbranch
+#       - main  #// Se till att detta matchar din huvudbranch
 
 # jobs:
 #   deploy:
