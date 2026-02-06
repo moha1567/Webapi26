@@ -3,7 +3,7 @@ name: Deploy to AWS Elastic Beanstalk
 on:
   push:
     branches:
-      - letsgo  #// Se till att detta matchar din huvudbranch
+      - letsgo 
 
 jobs:
   deploy:
@@ -15,14 +15,15 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '10.0'  
+        with: 
+          dotnet-version: '10.0'
 
       - name: Publish .NET app
         run: dotnet publish -c Release -o ./publish
 
       - name: Zip published app
-        run: zip -r deploy.zip ./publish
+        # Ändrat här för att undvika undermappar i zippen
+        run: cd ./publish && zip -r ../deploy.zip .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -34,8 +35,11 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
         with:
-          application_name: Web APi 26
-          environment_name: WebAPi26-env
+          # Vi lägger till dessa rader här för att säkerställa att just denna action ser dem
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: "Web APi 26"
+          environment_name: "WebAPi26-env"
           version_label: "deploy-${{ github.run_number }}"
           region: eu-north-1  
           deployment_package: deploy.zip
