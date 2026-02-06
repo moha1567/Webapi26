@@ -3,7 +3,7 @@ name: Deploy to AWS Elastic Beanstalk
 on:
   push:
     branches:
-      - main  #// Se till att detta matchar din huvudbranch
+      - letsgo  #// Se till att detta matchar din huvudbranch
 
 jobs:
   deploy:
