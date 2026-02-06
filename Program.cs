@@ -1,3 +1,6 @@
+using Microsoft.OpenApi.Models; 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Lägg till services för API och Swagger
