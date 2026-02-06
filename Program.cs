@@ -23,4 +23,12 @@ app.UseSwaggerUI(c =>
 app.UseAuthorization();
 app.MapControllers();
 
+// Lägg till detta precis innan app.Run();
+app.MapGet("/hello", () => "Hej från AWS!");
+
+app.MapPost("/encrypt", (string text) => {
+    // Här lägger du din krypteringslogik
+    return $"Krypterat: {text}_secret";
+});
+
 app.Run();
