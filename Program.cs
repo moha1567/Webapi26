@@ -22,7 +22,7 @@ app.UseSwaggerUI(c =>
 // app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.MapControllers()
+app.MapControllers();
 
 // Enkel hälsningsfras för att se att allt lever
 app.MapGet("/status", () => "Welcome to the encryption converter, created by Muhammad Sheik Ali. \nThe system works flawless and running in AWS so have  fun converting!");
